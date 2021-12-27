@@ -1,4 +1,6 @@
 <?php
+require_once 'config.php';
+require_once 'database.php';
 
 // verifica se existe o usuario e password
 if(!isset($_SERVER['PHP_AUTH_USER']) || !isset($_SERVER['PHP_AUTH_PW']))
@@ -9,26 +11,22 @@ if(!isset($_SERVER['PHP_AUTH_USER']) || !isset($_SERVER['PHP_AUTH_PW']))
     ]);
     die;
 }
-
-// usuários permitidos
-$usuarios = [
-    ['user'=>'Andre','password'=>'123'],
-    ['user'=>'Luis','password'=>'321'],
-    ['user'=>'Joao','password'=>'132'],
-];
-
 // verifica se o usuário e password são validos
 $user = $_SERVER['PHP_AUTH_USER'];
 $pass = $_SERVER['PHP_AUTH_PW'];
 
-$valid_authentication =  false;
+$params = [':user'=>$user, ':password'=>$pass];
 
-foreach($usuarios as $usuario)
+//Verificar  se a autenticação é valida
+$db = new database();
+
+//Query de busca de usuários validos
+$result = $db->EXE_QUERY("SELECT * FROM AUTHENTICATION WHERE user_name=:user AND passwrd=:password", $params);
+
+$valid_authentication =  false;
+if(count($result)==1)
 {
-    if($usuario['user']==$user && $usuario['password']==$pass)
-    {
-        $valid_authentication = true;
-    }
+    $valid_authentication =  true;
 }
 
 if(!$valid_authentication)
