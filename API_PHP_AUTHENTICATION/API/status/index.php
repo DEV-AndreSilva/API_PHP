@@ -1,6 +1,6 @@
 <?php
 //incluir as dependencias
-
+require_once '../inc/authentication.php';
 //analisar o pedido
 
 //emitir a resposta

@@ -1,32 +1,70 @@
 <?php
+require_once 'inc/config.php';
 
-echo 'Ola mundo';
-echo '<hr>';
-//request API
+$variables = ['id'=>10, 'nome'=>'Andre', 'idade'=>18];
 
-api_request('http://localhost/API/API_PHP_AUTHENTICATION/API/get_datetime/');
+$result = api_request('get_datetime','GET',$variables,);
+echo '<pre>';
+print_r($result);
+echo '</pre>';
 
-
-function api_request($endpoint, $user = null, $pass = null)
+function api_request($endpoint, $method ='GET', $variables = [], $user = API_USER, $password = API_PASSWORD)
 {
-    $curl =  curl_init($endpoint);
+    //iniciando a variavel do curl
+    $curl =  curl_init();
+
+    //Defininido os headers da requisição
     $headers =  array(
-        'Content-Type: application/json',
-        'Authorization: Basic '.base64_encode("$user:$pass")
+        'Content-Type: application/json', //tipo
+        'Authorization: Basic '.base64_encode("$user:$password") //formato de autorização
     );
 
+    //preenchendo headers
     curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
+
+    //indicando o retorno de informações como string
     curl_setopt($curl, CURLOPT_RETURNTRANSFER, TRUE);
 
-    $response = curl_exec($curl);
+    //define a URL base
+    $url = API_BASE_URL . $endpoint .'/';
 
-    if(curl_errno($curl))
+    //Verificando se é uma requisição do tipo GET
+    if($method == 'GET')
     {
-        throw new Exception(curl_error($curl));
+        //Se existir variaveis
+        if(!empty($variables))
+        {
+            //concatenando as variaveis da query string da requisição
+            $url.='?'.http_build_query($variables);
+        }
+
     }
 
+    //Verificando se é uma requisição do tipo POST
+    if($method == 'POST')
+    {
+        //definindo as variaveis da requisição por post
+        $variables = array_merge(['endpoint'=>$endpoint], $variables);
+
+        curl_setopt($curl, CURLOPT_POSTFIELDS,  $variables);
+    }
+
+    //Indicando a URL da busca
+    curl_setopt($curl, CURLOPT_URL, $url);
+
+    //executando o CURL
+    $response = curl_exec($curl);
+
+   
+    //verifica se há error
+    if(curl_errno($curl))
+    {
+        throw new Exception(curl_errno($curl));
+    }
+
+    //fechamento da variavel curl
     curl_close($curl);
 
-    echo "<pre>$response</pre>";
+   return json_decode($response, true);
 }
 
