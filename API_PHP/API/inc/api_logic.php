@@ -134,6 +134,30 @@ class api_logic
         return $data;
     }
 
+    /**
+     * Endpoint que retorna o total de registros ativos e inativos
+     * 
+     * @return array
+     */
+    public function get_totals()
+    {
+        $db =  new database();
+        $results = $db->EXE_QUERY(
+        "   SELECT 'Clientes ativos' AS 'registros', COUNT(*) Total FROM clientes WHERE deleted_at IS NULL UNION ALL
+            SELECT 'Produtos ativos' AS 'registros', COUNT(*) Total FROM produtos WHERE deleted_at IS NULL UNION all
+            SELECT 'Clientes inativos' AS 'registros', COUNT(*) Total FROM clientes WHERE deleted_at IS NOT NULL UNION ALL
+            SELECT 'Produtos inativos' AS 'registros', COUNT(*) Total FROM produtos WHERE deleted_at IS NOT NULL 
+        ");
+
+                
+        $data = ['status'=>'Success',
+        'message' => 'API está funcionando',
+        'results'=>$results
+        ];
+
+        return $data;
+    }
+
 //---------------------------------------------------------------------
 //                          Clientes
 //---------------------------------------------------------------------
