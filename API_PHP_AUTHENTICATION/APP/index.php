@@ -3,6 +3,9 @@ require_once 'inc/config.php';
 
 $variables = ['id'=>10, 'nome'=>'Andre', 'idade'=>18];
 
+//echo password_hash('123456',PASSWORD_DEFAULT);
+//die();
+
 $result = api_request('get_datetime','GET',$variables,);
 echo '<pre>';
 print_r($result);
