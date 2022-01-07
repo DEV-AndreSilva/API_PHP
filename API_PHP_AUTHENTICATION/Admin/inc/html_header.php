@@ -1,3 +1,8 @@
+<?PHP
+    //verificando se a constante root existe
+    defined('ROOT') or die('Acesso invalido');
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
