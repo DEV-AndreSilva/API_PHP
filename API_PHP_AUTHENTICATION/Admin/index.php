@@ -1,12 +1,11 @@
 <?php
 define('ROOT',true);
+//se não existir sessão ela sera iniciada
+if(session_status()===PHP_SESSION_NONE) session_start();
 
 require_once('inc/config.php');
 require_once('inc/database.php');
 require_once('inc/html_header.php');
-
-//se não existir sessão ela sera iniciada
-if(session_status()===PHP_SESSION_NONE) session_start();
 
 $rota = '';
 
@@ -22,7 +21,8 @@ else if(!isset($_SESSION['id_admin']) && $_SERVER['REQUEST_METHOD'] =='POST')
 }
 else
 {
-
+    //interior do BackOffice;
+    $rota = 'home';
 }
 
 //define qual a rota o usuário acessara
@@ -33,6 +33,10 @@ switch ($rota) {
 
     case 'login_submit':
         require_once('login_submit.php');
+        break;
+
+    case 'home':
+        require_once('BO/home.php');
         break;
 
     default:

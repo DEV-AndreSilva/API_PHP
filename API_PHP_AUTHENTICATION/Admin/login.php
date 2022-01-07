@@ -17,12 +17,12 @@ if (session_status() === PHP_SESSION_NONE) session_start();
 
                     <div class="mb-3">
                         <label class="form-label">Usuário</label>
-                        <input type="text" name="text_usuario" class="form-control">
+                        <input type="text" name="text_usuario" class="form-control" required>
                     </div>
 
                     <div class="mb-3">
                         <label class="form-label">Senha</label>
-                        <input type="password" name="text_senha" class="form-control">
+                        <input type="password" name="text_senha" class="form-control" required>
                     </div>
 
                     <div class="text-center mb-2">
