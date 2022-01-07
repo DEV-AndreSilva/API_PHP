@@ -23,6 +23,12 @@ else
 {
     //interior do BackOffice;
     $rota = 'home';
+
+    //se existir uma rota explicita
+    if(isset($_GET['r']))
+    {
+        $rota = $_GET['r'];
+    }
 }
 
 //define qual a rota o usuário acessara
@@ -35,8 +41,13 @@ switch ($rota) {
         require_once('login_submit.php');
         break;
 
+    //após login
     case 'home':
         require_once('BO/home.php');
+        break;
+    
+    case 'new_client':
+        require_once('bo/new_client.php');
         break;
 
     default:
